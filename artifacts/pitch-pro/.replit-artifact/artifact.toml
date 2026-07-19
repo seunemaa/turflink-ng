@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "seun.emaa Pitch Pro"
+version = "1.0.0"
+id = "artifacts/pitch-pro"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19227
+
+[services.development]
+run = "pnpm --filter @workspace/pitch-pro run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/pitch-pro", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/pitch-pro/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19227"
+BASE_PATH = "/"

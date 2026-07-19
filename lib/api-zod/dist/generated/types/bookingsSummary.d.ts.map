@@ -1,0 +1,1 @@
+{"version":3,"file":"bookingsSummary.d.ts","sourceRoot":"","sources":["../../../src/generated/types/bookingsSummary.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,WAAW,CAAC;AAEzC,MAAM,WAAW,eAAe;IAC9B,aAAa,EAAE,MAAM,CAAC;IACtB,iBAAiB,EAAE,MAAM,CAAC;IAC1B,gBAAgB;IAChB,YAAY,CAAC,EAAE,MAAM,GAAG,IAAI,CAAC;IAC7B,cAAc,EAAE,OAAO,EAAE,CAAC;CAC3B"}

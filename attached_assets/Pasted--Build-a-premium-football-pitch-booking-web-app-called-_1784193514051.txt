@@ -1,0 +1,32 @@
+"Build a premium football pitch booking web app called 'seun.emaa Pitch Pro'. The app should be localized for Nigeria using Nigerian Naira (₦).
+Pitches to include (Nigerian Stadiums):
+Lagos Legacy Pitch (11v11, Hybrid Grass, ₦45,000/hr)
+Abuja National Turf (10v10, Synthetic, ₦35,000/hr)
+The Port Harcourt Arena (9v9, Premium Astro, ₦25,000/hr)
+Enugu Coal City Field (7v7, Indoor Turf, ₦15,000/hr)
+Requirements:
+Owner/Developer Name: Use 'seun.emaa' in the footer and as the default administrator.
+Booking System: Users must select a date and a 1-hour time slot (8 AM to 11 PM).
+Unique Feature: Add a 'Match Type' toggle for bookings: 'Friendly Match' or 'Competitive League'.
+Bug Prevention: Ensure all database numeric values for prices are handled as Numbers (not strings) to prevent 500 ZodErrors.
+Currency: Use the ₦ (Naira) symbol for all pricing."
+Phase 2: The "Friend-Beating" Visuals (Forest Green & Lime)
+Once the basic app is running, use this prompt to give it that "Electric" green look from the screenshots.
+"Now, let’s make the design world-class and unique.
+Color Palette: Use a 'Midnight Forest Green' (#052c1e) for the background and 'Electric Lime' (#bfff00) for highlights, buttons, and badges.
+Typography: Use a bold, athletic font for headings (like 'Inter' or 'Montserrat').
+Visual Style: Add 'Glow' effects to the 'Book Now' buttons.
+Pitch Cards: Each pitch card should show a 'Format' badge (e.g., 11v11), 'Location' badge, and 'Surface Type' (e.g., Natural Grass).
+Animations: Add a slight hover-zoom effect on the pitch cards to make the UI feel interactive and premium."
+Phase 3: Advanced "Pro" Features
+This part makes your app better than a standard booking site.
+"Add these advanced features to make the app unique:
+Add-on Services: When booking, give users checkboxes to add: 'Professional Referee' (+₦5,000), 'Team Bibs' (+₦2,000), or 'Cold Water Crate' (+₦3,000).
+Seun.emaa Priority Access: Add a 'Membership' section where users can sign up for 'seun.emaa Pro' to get 10% off all bookings.
+Weather Widget: Add a simple placeholder or real API for 'Current Pitch Weather' in Lagos/Abuja so players know if it's raining."
+Phase 4: Integration & Security
+Final step to make it a real-world functional app.
+"Finalize the technical setup:
+Authentication: Set up Replit Auth so users can log in to view 'My Bookings'.
+Payment Link: Set up a mock 'Stream Pay' or 'Paystack' integration. When a user clicks 'Confirm', redirect them to a professional payment summary page showing the 'seun.emaa' invoice.
+Success Page: Create a beautiful confirmation page with a 'Booking Reference Number' and a button to 'Add to Google Calendar'."

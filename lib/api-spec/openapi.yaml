@@ -1,0 +1,528 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: seun.emaa Pitch Pro API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: pitches
+    description: Football pitch operations
+  - name: bookings
+    description: Booking operations
+  - name: auth
+    description: Authentication operations
+  - name: membership
+    description: Membership operations
+  - name: weather
+    description: Weather operations
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /pitches:
+    get:
+      operationId: listPitches
+      tags: [pitches]
+      summary: List all pitches
+      responses:
+        "200":
+          description: List of pitches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pitch"
+
+  /pitches/{id}:
+    get:
+      operationId: getPitch
+      tags: [pitches]
+      summary: Get a pitch by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Pitch details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pitch"
+        "404":
+          description: Pitch not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /pitches/{id}/availability/{date}:
+    get:
+      operationId: checkAvailability
+      tags: [pitches]
+      summary: Get available time slots for a pitch on a given date
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            description: ISO date string (YYYY-MM-DD)
+      responses:
+        "200":
+          description: Available time slots
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityResponse"
+
+  /bookings:
+    post:
+      operationId: createBooking
+      tags: [bookings]
+      summary: Create a new booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingInput"
+      responses:
+        "201":
+          description: Booking created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Slot already taken
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bookings/my:
+    get:
+      operationId: getMyBookings
+      tags: [bookings]
+      summary: Get bookings for the authenticated user
+      responses:
+        "200":
+          description: User bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bookings/{reference}:
+    get:
+      operationId: getBookingByReference
+      tags: [bookings]
+      summary: Get a booking by reference number
+      parameters:
+        - name: reference
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Booking details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "404":
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bookings/summary:
+    get:
+      operationId: getBookingsSummary
+      tags: [bookings]
+      summary: Get booking statistics summary
+      responses:
+        "200":
+          description: Summary statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingsSummary"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get the currently authenticated user
+      responses:
+        "200":
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /membership:
+    get:
+      operationId: getMembership
+      tags: [membership]
+      summary: Get membership status for the authenticated user
+      responses:
+        "200":
+          description: Membership status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MembershipStatus"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    post:
+      operationId: signUpMembership
+      tags: [membership]
+      summary: Sign up for seun.emaa Pro membership
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MembershipInput"
+      responses:
+        "201":
+          description: Membership created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MembershipStatus"
+        "409":
+          description: Already a member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /weather:
+    get:
+      operationId: getWeather
+      tags: [weather]
+      summary: Get current weather for a city
+      parameters:
+        - name: city
+          in: query
+          required: false
+          schema:
+            type: string
+            description: City name (Lagos or Abuja)
+      responses:
+        "200":
+          description: Weather data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeatherData"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Pitch:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        location:
+          type: string
+        format:
+          type: string
+          description: "e.g. 11v11, 10v10, 9v9, 7v7"
+        surface:
+          type: string
+          description: "e.g. Hybrid Grass, Synthetic, Premium Astro, Indoor Turf"
+        pricePerHour:
+          type: number
+          description: Price in Naira per hour
+        imageUrl:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        amenities:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - name
+        - location
+        - format
+        - surface
+        - pricePerHour
+
+    AvailabilityResponse:
+      type: object
+      properties:
+        pitchId:
+          type: integer
+        date:
+          type: string
+        availableSlots:
+          type: array
+          items:
+            type: string
+            description: Time slot in HH:MM format (24h)
+        bookedSlots:
+          type: array
+          items:
+            type: string
+      required:
+        - pitchId
+        - date
+        - availableSlots
+        - bookedSlots
+
+    BookingInput:
+      type: object
+      properties:
+        pitchId:
+          type: integer
+        date:
+          type: string
+          description: ISO date (YYYY-MM-DD)
+        timeSlot:
+          type: string
+          description: Start time in HH:MM (24h)
+        matchType:
+          type: string
+          enum: [friendly, competitive]
+        addOns:
+          type: array
+          items:
+            type: string
+            enum: [referee, bibs, water]
+        guestName:
+          type: ["string", "null"]
+          description: Name if user is not authenticated
+        guestEmail:
+          type: ["string", "null"]
+          description: Email if user is not authenticated
+      required:
+        - pitchId
+        - date
+        - timeSlot
+        - matchType
+        - addOns
+
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+        referenceNumber:
+          type: string
+        pitchId:
+          type: integer
+        pitch:
+          $ref: "#/components/schemas/Pitch"
+        userId:
+          type: ["string", "null"]
+        userName:
+          type: ["string", "null"]
+        userEmail:
+          type: ["string", "null"]
+        date:
+          type: string
+        timeSlot:
+          type: string
+        matchType:
+          type: string
+          enum: [friendly, competitive]
+        addOns:
+          type: array
+          items:
+            type: string
+        basePrice:
+          type: number
+        addOnsTotal:
+          type: number
+        discountApplied:
+          type: number
+        totalPrice:
+          type: number
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled]
+        createdAt:
+          type: string
+      required:
+        - id
+        - referenceNumber
+        - pitchId
+        - pitch
+        - date
+        - timeSlot
+        - matchType
+        - addOns
+        - basePrice
+        - addOnsTotal
+        - discountApplied
+        - totalPrice
+        - status
+        - createdAt
+
+    BookingsSummary:
+      type: object
+      properties:
+        totalBookings:
+          type: integer
+        confirmedBookings:
+          type: integer
+        popularPitch:
+          type: ["string", "null"]
+        recentBookings:
+          type: array
+          items:
+            $ref: "#/components/schemas/Booking"
+      required:
+        - totalBookings
+        - confirmedBookings
+        - recentBookings
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: ["string", "null"]
+        email:
+          type: ["string", "null"]
+        profileImage:
+          type: ["string", "null"]
+        isMember:
+          type: boolean
+      required:
+        - id
+        - isMember
+
+    MembershipStatus:
+      type: object
+      properties:
+        isMember:
+          type: boolean
+        memberSince:
+          type: ["string", "null"]
+        discountPercent:
+          type: number
+      required:
+        - isMember
+        - discountPercent
+
+    MembershipInput:
+      type: object
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+      required:
+        - email
+        - name
+
+    WeatherData:
+      type: object
+      properties:
+        city:
+          type: string
+        condition:
+          type: string
+          description: "e.g. Sunny, Rainy, Cloudy"
+        temperature:
+          type: number
+          description: Temperature in Celsius
+        humidity:
+          type: number
+        windSpeed:
+          type: number
+        icon:
+          type: string
+        pitchCondition:
+          type: string
+          description: "e.g. Perfect for play, Wet pitch expected"
+        updatedAt:
+          type: string
+      required:
+        - city
+        - condition
+        - temperature
+        - humidity
+        - windSpeed
+        - icon
+        - pitchCondition
+        - updatedAt
